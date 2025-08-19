@@ -1,38 +1,53 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class ActivityJournalApplication {
-    public static void main (String... daysToJournal) {
 
-        LocalDate today = LocalDate.now();
+    public static final LocalDate today = LocalDate.now();
+
+    public static void main (String... activities) {
 
         String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
 
         File journalFile = new File(journalPath);
 
         if (journalFile.exists()) {
-            // файл журнала за текущий месяц есть
-            // делаем запись за сегодняшний день - сколько часов учебы и дел, короткое саммари основных трудозатрат
-            // обновляем файл, проверяем, что изменения сохранились
+            StringBuilder readJournal = readCalendarFromFile(journalPath);
+            String updatedJournal = journalToday(activities);
+            writeJournalToFile(journalPath, readJournal.insert(0, updatedJournal).toString());
         } else {
-            String monthJournal = createCurrentMonthJournal(today, daysToJournal);
+            String monthJournal = journalToday(activities);
             writeJournalToFile(journalPath, monthJournal);
         }
     }
 
-    private static String createCurrentMonthJournal(LocalDate dayToJournal, String... daysToJournal) {
+    private static String journalToday(String... activities) {
         int programmingHours = 4;
         int dealHours = 4;
 
-        return String.format("[%s %s] %d / %d: %s", dayToJournal.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru")),
-                                                    dayToJournal.getDayOfMonth(),
-                                                    programmingHours + dealHours, 10,
-                                                    daysToJournal[0]);
+        return String.format("[%s %s] %d/%dh: %s\n", today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru")),
+                                                   today.getDayOfMonth(),
+                                                   programmingHours + dealHours, 10,
+                                                   activities[0]);
+    }
+
+    private static StringBuilder readCalendarFromFile(String journalPath) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(journalPath))) {
+            StringBuilder journalBuilder = new StringBuilder();
+            String line = bufferedReader.readLine();
+
+            while (line != null) {
+                journalBuilder.append(line);
+                journalBuilder.append(System.lineSeparator());
+                line = bufferedReader.readLine();
+            }
+
+            return journalBuilder;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private static void writeJournalToFile(String journalPath, String journal) {
