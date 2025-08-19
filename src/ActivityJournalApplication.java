@@ -1,38 +1,45 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.time.format.TextStyle;
+import java.util.Locale;
 
 public class ActivityJournalApplication {
-    public static void main (String[] weekJournal) {
+    public static void main (String... daysToJournal) {
 
         LocalDate today = LocalDate.now();
 
-        String calendarPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
+        String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
 
-        File calendarFile = new File(calendarPath);
+        File journalFile = new File(journalPath);
 
-        if (calendarFile.exists()) {
-            StringBuilder readCalendar = readCalendarFromFile(calendarPath);
-            markProgrammingDays(programmingDays, readCalendar, today.getDayOfMonth());
-            writeUpdatedCalendarToFile(calendarPath, readCalendar.toString());
+        if (journalFile.exists()) {
+            // файл журнала за текущий месяц есть
+            // делаем запись за сегодняшний день - сколько часов учебы и дел, короткое саммари основных трудозатрат
+            // обновляем файл, проверяем, что изменения сохранились
         } else {
-            LocalDate monthBegin = today.minusDays(today.getDayOfMonth() - 1);
-            int dayOfWeek = monthBegin.getDayOfWeek().getValue();
-            StringBuilder calendar = createCalendar(monthBegin, dayOfWeek);
-            markProgrammingDays(programmingDays, calendar, today.getDayOfMonth());
-            writeUpdatedCalendarToFile(calendarPath, calendar.toString());
+            String monthJournal = createCurrentMonthJournal(today, daysToJournal);
+            writeJournalToFile(journalPath, monthJournal);
+        }
+    }
 
-            for (int i = 0; i < 7; i++) {
+    private static String createCurrentMonthJournal(LocalDate dayToJournal, String... daysToJournal) {
+        int programmingHours = 4;
+        int dealHours = 4;
 
-                LocalDate dayToJournal = today;
-                if (i != 0) {
-                    dayToJournal = dayToJournal.minusDays(i);
-                }
-                String activity = i < weekJournal.length ? weekJournal[i] : "";
+        return String.format("[%s %s] %d / %d: %s", dayToJournal.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru")),
+                                                    dayToJournal.getDayOfMonth(),
+                                                    programmingHours + dealHours, 10,
+                                                    daysToJournal[0]);
+    }
 
-                String formattedOutput = String.format("%d %s: %s", dayToJournal.getDayOfMonth(), dayToJournal.getMonth().toString().toLowerCase(), activity);
-                System.out.println(formattedOutput);
-            }
+    private static void writeJournalToFile(String journalPath, String journal) {
+        try (PrintWriter writer = new PrintWriter(new FileOutputStream(journalPath), true)) {
+            writer.print(journal);
+        } catch (FileNotFoundException e) {
+            System.out.println("Что-то пошло не так");
         }
     }
 }
