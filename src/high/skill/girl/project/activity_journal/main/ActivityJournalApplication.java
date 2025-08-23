@@ -22,6 +22,12 @@ public class ActivityJournalApplication {
 
         if (journalFile.exists()) {
             List<JournalNote> journalNotes = JournalParser.parse(journalPath);
+
+            JournalNote lastRecord = journalNotes.getFirst();
+            if (lastRecord.dayOfMonth() == today.getDayOfMonth()) {
+                System.out.println("За сегодняшний день запись уже есть");
+                return;
+            }
             JournalNote newRecord = journalToday(journalInfo);
             journalNotes.add(0, newRecord);
             writeJournalToFile(journalPath, journalNotes);

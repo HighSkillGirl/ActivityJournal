@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
 public class JournalParser {
 
     private static final Pattern DAY_INFO = Pattern.compile("\\[(\\p{L}+) (\\d+)\\]");
-    private static final Pattern ACTIVITY_DETAILS   = Pattern.compile("(\\d+)/(\\d+)h: (.+)");
-    private static final Pattern LIFE   = Pattern.compile("life: (.+)");
+    private static final Pattern ACTIVITY_DETAILS = Pattern.compile("(\\d+)/(\\d+)h: (.+)");
+    private static final Pattern LIFE = Pattern.compile("life: (.+)");
 
     public static List<JournalNote> parse(String journalPath) {
         List<JournalNote> journalNotes = new ArrayList<>();
