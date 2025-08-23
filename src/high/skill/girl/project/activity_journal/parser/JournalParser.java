@@ -59,7 +59,7 @@ public class JournalParser {
                 journalNotes.add(new JournalNote(weekday, dayNumber, activityDetails, life));
             }
         } catch (IOException e) {
-            System.out.println("wmth went wrong");
+            System.out.println("smth went wrong");
         }
 
         return journalNotes;

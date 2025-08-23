@@ -9,8 +9,6 @@ import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ActivityJournalApplication {
 
@@ -23,10 +21,10 @@ public class ActivityJournalApplication {
         File journalFile = new File(journalPath);
 
         if (journalFile.exists()) {
-            var journalNotes = JournalParser.parse(journalPath);
-            journalNotes.forEach(System.out::print);
-//            String updatedJournal = journalToday(journalInfo);
-//            writeJournalToFile(journalPath, readJournal.insert(0, updatedJournal).toString());
+            List<JournalNote> journalNotes = JournalParser.parse(journalPath);
+            JournalNote newRecord = journalToday(journalInfo);
+            journalNotes.add(0, newRecord);
+            writeJournalToFile(journalPath, journalNotes);
         } else {
 //            String monthJournal = journalToday(journalInfo);
 //            writeJournalToFile(journalPath, monthJournal);
@@ -34,22 +32,22 @@ public class ActivityJournalApplication {
     }
 
 
+    private static JournalNote journalToday(String... journalInfo) {
+        String todayDayName = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru"));
+        int todayAsDayOfMonth = today.getDayOfMonth();
 
-//    private static String journalToday(String... journalInfo) {
-//        String journalNote = String.format("[%s %s] %d/6h: %s\n\t\t%d/4h: %s\n\t\tlife: %s\n",
-//                today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru")),
-//                today.getDayOfMonth(), Integer.parseInt(journalInfo[0]), journalInfo[1], Integer.parseInt(journalInfo[2]), journalInfo[3], journalInfo[4]);
-//
-//        System.out.println(journalNote);
-//
-//        return journalNote;
-//    }
+        List<JournalNote.ActivityDetails> activities = new ArrayList<>();
+        activities.add(new JournalNote.ActivityDetails(Integer.parseInt(journalInfo[0]), 6, journalInfo[1]));
+        activities.add(new JournalNote.ActivityDetails(Integer.parseInt(journalInfo[2]), 4, journalInfo[3]));
+
+        return new JournalNote(todayDayName, todayAsDayOfMonth, activities, journalInfo[4]);
+    }
 
 
 
-    private static void writeJournalToFile(String journalPath, String journal) {
+    private static void writeJournalToFile(String journalPath, List<JournalNote> updatedJournal) {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(journalPath), true)) {
-            writer.print(journal);
+            updatedJournal.forEach(writer::print);
         } catch (FileNotFoundException e) {
             System.out.println("Что-то пошло не так");
         }
