@@ -1,6 +1,6 @@
 package high.skill.girl.project.activity_journal.parser;
 
-import high.skill.girl.project.activity_journal.pojo.JournalNote;
+import high.skill.girl.project.activity_journal.pojo.JournalRecord;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -16,13 +16,13 @@ public class JournalParser {
     private static final Pattern ACTIVITY_DETAILS = Pattern.compile("(\\d+)/(\\d+)h: (.+)");
     private static final Pattern LIFE = Pattern.compile("life: (.+)");
 
-    public static List<JournalNote> parse(String journalPath) {
-        List<JournalNote> journalNotes = new ArrayList<>();
+    public static List<JournalRecord> parse(String journalPath) {
+        List<JournalRecord> journalRecordList = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(journalPath))) {
             String weekday = null;
             int dayNumber = -1;
-            List<JournalNote.ActivityDetails> activityDetails = new ArrayList<>();
+            List<JournalRecord.ActivityDetails> activityDetails = new ArrayList<>();
             String life = null;
 
             String line = bufferedReader.readLine();
@@ -34,7 +34,7 @@ public class JournalParser {
 
                 if (dayInfoMatcher.find()) {
                     if (weekday != null) {
-                        journalNotes.add(new JournalNote(weekday, dayNumber, activityDetails, life));
+                        journalRecordList.add(new JournalRecord(weekday, dayNumber, activityDetails, life));
                         activityDetails = new ArrayList<>();
                         life = null;
                     }
@@ -42,10 +42,9 @@ public class JournalParser {
                     dayNumber = Integer.parseInt(dayInfoMatcher.group(2));
                 }
                 if (activitiesMatcher.find()) {
-                    activityDetails.add(new JournalNote.ActivityDetails(
-                            Integer.parseInt(activitiesMatcher.group(1)),
-                            Integer.parseInt(activitiesMatcher.group(2)),
-                            activitiesMatcher.group(3)
+                    activityDetails.add(new JournalRecord.ActivityDetails(Integer.parseInt(activitiesMatcher.group(1)),
+                                                                          Integer.parseInt(activitiesMatcher.group(2)),
+                                                                          activitiesMatcher.group(3)
                     ));
                 }
                 if (lifeMatcher.find()) {
@@ -56,12 +55,12 @@ public class JournalParser {
             }
 
             if (weekday != null) {
-                journalNotes.add(new JournalNote(weekday, dayNumber, activityDetails, life));
+                journalRecordList.add(new JournalRecord(weekday, dayNumber, activityDetails, life));
             }
         } catch (IOException e) {
             System.out.println("smth went wrong");
         }
 
-        return journalNotes;
+        return journalRecordList;
     }
 }

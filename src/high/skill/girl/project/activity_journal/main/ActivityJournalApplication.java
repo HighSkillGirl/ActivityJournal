@@ -1,7 +1,7 @@
 package high.skill.girl.project.activity_journal.main;
 
 import high.skill.girl.project.activity_journal.parser.JournalParser;
-import high.skill.girl.project.activity_journal.pojo.JournalNote;
+import high.skill.girl.project.activity_journal.pojo.JournalRecord;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -12,45 +12,44 @@ import java.util.Locale;
 
 public class ActivityJournalApplication {
 
-    private static final LocalDate today = LocalDate.of(2025, 7, 1);
+    private static final LocalDate today = LocalDate.now();
 
     public static void main (String... journalInfo) {
         String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
 
         File journalFile = new File(journalPath);
 
-        if (journalFile.exists()) {
-            List<JournalNote> journalNotes = JournalParser.parse(journalPath);
+        List<JournalRecord> journalRecordList = new ArrayList<>();
 
-            JournalNote lastRecord = journalNotes.getFirst();
+        if (journalFile.exists()) {
+            journalRecordList.addAll(JournalParser.parse(journalPath));
+            JournalRecord lastRecord = journalRecordList.getFirst();
             if (lastRecord.dayOfMonth() == today.getDayOfMonth()) {
                 System.out.println("За сегодняшний день запись уже есть");
                 return;
             }
-            JournalNote newRecord = journalToday(journalInfo);
-            journalNotes.addFirst(newRecord);
-            writeJournalToFile(journalPath, journalNotes);
-        } else {
-            JournalNote note = journalToday(journalInfo);
-            writeJournalToFile(journalPath, List.of(note));
         }
+
+        JournalRecord newRecord = makeRecordingToday(journalInfo);
+        journalRecordList.addFirst(newRecord);
+        writeJournalToFile(journalPath, journalRecordList);
     }
 
 
-    private static JournalNote journalToday(String... journalInfo) {
-        String todayDayName = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru"));
-        int todayAsDayOfMonth = today.getDayOfMonth();
+    private static JournalRecord makeRecordingToday(String... journalInfo) {
+        String weekDayName = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru"));
+        int dayOfMonth = today.getDayOfMonth();
 
-        List<JournalNote.ActivityDetails> activities = new ArrayList<>();
-        activities.add(new JournalNote.ActivityDetails(Integer.parseInt(journalInfo[0]), 6, journalInfo[1]));
-        activities.add(new JournalNote.ActivityDetails(Integer.parseInt(journalInfo[2]), 4, journalInfo[3]));
+        List<JournalRecord.ActivityDetails> activities = new ArrayList<>();
+        activities.add(new JournalRecord.ActivityDetails(Integer.parseInt(journalInfo[0]), 6, journalInfo[1]));
+        activities.add(new JournalRecord.ActivityDetails(Integer.parseInt(journalInfo[2]), 4, journalInfo[3]));
 
-        return new JournalNote(todayDayName, todayAsDayOfMonth, activities, journalInfo[4]);
+        return new JournalRecord(weekDayName, dayOfMonth, activities, journalInfo[4]);
     }
 
 
 
-    private static void writeJournalToFile(String journalPath, List<JournalNote> updatedJournal) {
+    private static void writeJournalToFile(String journalPath, List<JournalRecord> updatedJournal) {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(journalPath), true)) {
             updatedJournal.forEach(writer::print);
         } catch (FileNotFoundException e) {

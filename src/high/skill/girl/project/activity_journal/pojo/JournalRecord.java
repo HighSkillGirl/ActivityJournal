@@ -2,9 +2,9 @@ package high.skill.girl.project.activity_journal.pojo;
 
 import java.util.List;
 
-public record JournalNote(String weekDayName, int dayOfMonth,
-                          List<ActivityDetails> activityDetails,
-                          String lifeActivitySummary)
+public record JournalRecord(String weekDayName, int dayOfMonth,
+                            List<ActivityDetails> activityDetails,
+                            String lifeActivitySummary)
 {
 
     private static int dayInfoLength = 0;
