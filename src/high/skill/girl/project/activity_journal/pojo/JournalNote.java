@@ -7,10 +7,14 @@ public record JournalNote(String weekDayName, int dayOfMonth,
                           String lifeActivitySummary)
 {
 
+    private static int dayInfoLength = 0;
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("[%s %d] ", weekDayName, dayOfMonth));
+        String dayInfo = String.format("[%s %d] ", weekDayName, dayOfMonth);
+        dayInfoLength = dayInfo.length();
+        stringBuilder.append(dayInfo);
 
         for (ActivityDetails activity : activityDetails) {
             stringBuilder.append(activity.toString());
@@ -25,7 +29,7 @@ public record JournalNote(String weekDayName, int dayOfMonth,
     {
         @Override
         public String toString() {
-            return String.format("%d/%dh: %s\n\t\t", currentHours, goalHours, activitySummary);
+            return String.format("%d/%dh: %s\n%s", currentHours, goalHours, activitySummary, " ".repeat(Math.max(0, dayInfoLength)));
         }
     }
 

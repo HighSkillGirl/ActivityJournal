@@ -12,10 +12,9 @@ import java.util.Locale;
 
 public class ActivityJournalApplication {
 
-    private static final LocalDate today = LocalDate.now();
+    private static final LocalDate today = LocalDate.of(2025, 7, 1);
 
     public static void main (String... journalInfo) {
-
         String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
 
         File journalFile = new File(journalPath);
@@ -29,11 +28,11 @@ public class ActivityJournalApplication {
                 return;
             }
             JournalNote newRecord = journalToday(journalInfo);
-            journalNotes.add(0, newRecord);
+            journalNotes.addFirst(newRecord);
             writeJournalToFile(journalPath, journalNotes);
         } else {
-//            String monthJournal = journalToday(journalInfo);
-//            writeJournalToFile(journalPath, monthJournal);
+            JournalNote note = journalToday(journalInfo);
+            writeJournalToFile(journalPath, List.of(note));
         }
     }
 
