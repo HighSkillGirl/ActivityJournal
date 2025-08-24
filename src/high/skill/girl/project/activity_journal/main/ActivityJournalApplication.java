@@ -35,7 +35,6 @@ public class ActivityJournalApplication {
         writeJournalToFile(journalPath, journalRecordList);
     }
 
-
     private static JournalRecord makeRecordingToday(String... journalInfo) {
         String weekDayName = today.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.of("ru"));
         int dayOfMonth = today.getDayOfMonth();
@@ -44,10 +43,8 @@ public class ActivityJournalApplication {
         activities.add(new JournalRecord.ActivityDetails(Integer.parseInt(journalInfo[0]), 6, journalInfo[1]));
         activities.add(new JournalRecord.ActivityDetails(Integer.parseInt(journalInfo[2]), 4, journalInfo[3]));
 
-        return new JournalRecord(weekDayName, dayOfMonth, activities, journalInfo[4]);
+        return new JournalRecord(weekDayName, dayOfMonth, activities, journalInfo.length > 4 ? journalInfo[4] : "");
     }
-
-
 
     private static void writeJournalToFile(String journalPath, List<JournalRecord> updatedJournal) {
         try (PrintWriter writer = new PrintWriter(new FileOutputStream(journalPath), true)) {
