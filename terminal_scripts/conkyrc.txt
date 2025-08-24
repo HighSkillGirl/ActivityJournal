@@ -1,0 +1,32 @@
+conky.config = {
+    background = true,
+    update_interval = 60.0,        -- обновление раз в 60 секунд
+    double_buffer = true,
+    no_buffers = true,
+    text_buffer_size = 2048,
+
+    -- Окно
+    own_window = true,
+    own_window_type = 'desktop',   -- без рамок, на фоне рабочего стола
+    own_window_name = 'ConkyActivityJournal',  -- уникальное имя
+    own_window_transparent = true,
+    own_window_argb_visual = true,
+    own_window_argb_value = 0,     -- прозрачность (0 = полностью прозрачно)
+    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+
+    alignment = 'top_left',       -- положение: сверху справа
+    gap_x = 50,                    -- отступ справа
+    gap_y = 250,                    -- отступ сверху
+
+    use_xft = true,
+    font = 'Monospace:size=12',
+    override_utf8_locale = true,
+
+    default_color = 'white',
+    color1 = '#9DFF00',            -- для выделений
+};
+
+conky.text = [[
+${color1}Activity Journal
+${color white}${exec /usr/local/bin/showjournal 7}
+]];
