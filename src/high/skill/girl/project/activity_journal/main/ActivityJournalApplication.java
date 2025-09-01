@@ -15,14 +15,15 @@ public class ActivityJournalApplication {
     private static final LocalDate today = LocalDate.now();
 
     public static void main (String... journalInfo) {
-        String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt", today.getMonth().toString().toLowerCase(), today.getYear());
+        String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt",
+                                            today.getMonth().toString().toLowerCase(), today.getYear());
 
         File journalFile = new File(journalPath);
 
         List<JournalRecord> journalRecordList = new ArrayList<>();
 
         if (journalFile.exists()) {
-            journalRecordList.addAll(JournalParser.parse(journalPath));
+            journalRecordList.addAll(JournalParser.readFileAndParse(journalPath));
             JournalRecord lastRecord = journalRecordList.getFirst();
             if (lastRecord.dayOfMonth() == today.getDayOfMonth()) {
                 System.out.println("За сегодняшний день запись уже есть");

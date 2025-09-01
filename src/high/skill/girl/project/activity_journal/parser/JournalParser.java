@@ -16,7 +16,7 @@ public class JournalParser {
     private static final Pattern ACTIVITY_DETAILS = Pattern.compile("(\\d+)/(\\d+)h: (.+)");
     private static final Pattern LIFE = Pattern.compile("life: (.+)");
 
-    public static List<JournalRecord> parse(String journalPath) {
+    public static List<JournalRecord> readFileAndParse(String journalPath) {
         List<JournalRecord> journalRecordList = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(journalPath))) {
