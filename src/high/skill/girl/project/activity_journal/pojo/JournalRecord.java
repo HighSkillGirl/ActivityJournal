@@ -3,8 +3,7 @@ package high.skill.girl.project.activity_journal.pojo;
 import java.util.List;
 
 public record JournalRecord(String weekDayName, int dayOfMonth,
-                            List<ActivityDetails> activityDetails,
-                            String lifeActivitySummary)
+                            List<ActivityDetails> activityDetails)
 {
 
     private static int dayInfoLength = 0;
@@ -16,20 +15,19 @@ public record JournalRecord(String weekDayName, int dayOfMonth,
         dayInfoLength = dayInfo.length();
         stringBuilder.append(dayInfo);
 
-        for (ActivityDetails activity : activityDetails) {
-            stringBuilder.append(activity.toString());
+        for (int i = 0; i < activityDetails.size(); i++) {
+            if (i == activityDetails.size() -1) dayInfoLength = -1;
+            stringBuilder.append(activityDetails.get(i).toString());
         }
-
-        stringBuilder.append(String.format("life: %s\n", lifeActivitySummary));
 
         return stringBuilder.toString();
     }
 
-    public record ActivityDetails(int currentHours, int goalHours, String activitySummary)
+    public record ActivityDetails(String hoursInfo, String activitySummary)
     {
         @Override
         public String toString() {
-            return String.format("%d/%dh: %s\n%s", currentHours, goalHours, activitySummary, " ".repeat(Math.max(0, dayInfoLength)));
+            return String.format("%s%s - %s\n%s", hoursInfo, " ".repeat(Math.max(0, (6 - hoursInfo.length()) )), activitySummary, " ".repeat(Math.max(0, dayInfoLength)));
         }
     }
 
