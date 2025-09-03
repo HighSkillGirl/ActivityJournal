@@ -59,6 +59,7 @@ public class JournalCommands implements Runnable {
                 JournalRecord lastRecord = journalRecordList.getFirst();
                 if (lastRecord.dayOfMonth() == TODAY.getDayOfMonth()) {
                     System.out.println("За сегодняшний день запись уже есть");
+                    return;
                 }
             }
 
