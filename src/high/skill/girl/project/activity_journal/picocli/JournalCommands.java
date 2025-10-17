@@ -12,7 +12,7 @@ import java.util.Locale;
 
 @Command(
         name = "journal",
-        subcommands = {JournalCommands.NewDay.class}
+        subcommands = {JournalCommands.NewDay.class, JournalCommands.ShowJournal.class}
 )
 public class JournalCommands implements Runnable {
 
@@ -42,6 +42,19 @@ public class JournalCommands implements Runnable {
 
             JournalRecord newRecord = recordingNewEmptyDay(weekDayName, dayOfMonth);
             writeJournalToFile(journalPath, fileAsString, newRecord);
+        }
+    }
+
+    @Command(name = "show")
+    static class ShowJournal implements Runnable {
+
+        @Override
+        public void run() {
+            String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt",
+                    TODAY.getMonth().toString().toLowerCase(), TODAY.getYear());
+
+            String fileAsString = readJournalFile(journalPath);
+            System.out.println(fileAsString);
         }
     }
 
