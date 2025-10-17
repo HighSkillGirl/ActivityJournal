@@ -27,7 +27,8 @@ public record JournalRecord(String weekDayName, int dayOfMonth,
     {
         @Override
         public String toString() {
-            return String.format("%s%s - %s\n%s", hoursInfo, " ".repeat(Math.max(0, (6 - hoursInfo.length()) )), activitySummary, " ".repeat(Math.max(0, dayInfoLength)));
+            int hoursInfoInt = hoursInfo == null ? 0 : hoursInfo.length();
+            return String.format("%s%s - %s\n%s", hoursInfo, " ".repeat(Math.max(0, (6 - hoursInfoInt) )), activitySummary, " ".repeat(Math.max(0, dayInfoLength)));
         }
     }
 
