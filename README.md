@@ -3,14 +3,12 @@
 
 
 
-vera@hsg:~/IdeaProjects/ActivityJournal$ cd /home/vera/IdeaProjects/ActivityJournal
+cd /home/vera/IdeaProjects/ActivityJournal
 
-vera@hsg:~/IdeaProjects/ActivityJournal$ javac -cp "lib/picocli-4.7.6.jar" -d out $(find src -name "*.java")
+javac -cp "lib/picocli-4.7.6.jar" -d out $(find src -name "*.java")
 
-vera@hsg:~/IdeaProjects/ActivityJournal$ echo "Main-Class: high.skill.girl.project.activity_journal.main.ActivityJournalApplication" > MANIFEST.MF
+cd out
 
-vera@hsg:~/IdeaProjects/ActivityJournal$ cd out
+jar cfm ../ActivityJournal.jar ../MANIFEST.MF .
 
-vera@hsg:~/IdeaProjects/ActivityJournal/out$ jar cfm ../ActivityJournal.jar ../MANIFEST.MF .
-
-vera@hsg:~/IdeaProjects/ActivityJournal/out$ cd ..
+cd ..
