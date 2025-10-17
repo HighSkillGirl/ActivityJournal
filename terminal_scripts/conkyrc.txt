@@ -28,5 +28,5 @@ conky.config = {
 
 conky.text = [[
 ${color1}Activity Journal
-${color white}${exec /usr/local/bin/showjournal 7}
+${color white}${exec journal show}
 ]];
