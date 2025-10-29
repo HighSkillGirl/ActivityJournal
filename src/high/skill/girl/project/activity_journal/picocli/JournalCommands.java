@@ -27,7 +27,7 @@ public class JournalCommands implements Runnable {
 
         @Override
         public void run() {
-            String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt",
+            String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/month_files/journal_%s_%d.txt",
                     TODAY.getMonth().toString().toLowerCase(), TODAY.getYear());
 
             String fileAsString = readJournalFile(journalPath);
@@ -54,7 +54,7 @@ public class JournalCommands implements Runnable {
 
         @Override
         public void run() {
-            String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt",
+            String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/month_files/journal_%s_%d.txt",
                     TODAY.getMonth().toString().toLowerCase(), TODAY.getYear());
 
             String fileAsString = readJournalFile(journalPath);
