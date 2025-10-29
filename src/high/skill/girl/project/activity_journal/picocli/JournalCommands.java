@@ -1,6 +1,7 @@
 package high.skill.girl.project.activity_journal.picocli;
 
 import high.skill.girl.project.activity_journal.pojo.JournalRecord;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Command;
 
 import java.io.*;
@@ -48,13 +49,25 @@ public class JournalCommands implements Runnable {
     @Command(name = "show")
     static class ShowJournal implements Runnable {
 
+        @Option(names = {"-c", "--count"}, description = "Количество записей для отображения")
+        private int countToShow = 0;
+
         @Override
         public void run() {
             String journalPath = String.format("/home/vera/IdeaProjects/ActivityJournal/out/journal_%s_%d.txt",
                     TODAY.getMonth().toString().toLowerCase(), TODAY.getYear());
 
             String fileAsString = readJournalFile(journalPath);
-            System.out.println(fileAsString);
+
+            String[] split = fileAsString.split("(?=\\[)");
+
+            if (countToShow == 0 || countToShow > split.length) {
+                System.out.println(fileAsString);
+            } else {
+                for (int i = 0; i < countToShow; i++) {
+                    System.out.print(split[i]);
+                }
+            }
         }
     }
 
