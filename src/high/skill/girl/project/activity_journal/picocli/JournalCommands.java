@@ -94,7 +94,7 @@ public class JournalCommands implements Runnable {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Ошибка во время работы с файлом: " + e.getLocalizedMessage());
+            System.out.println("За текущий месяц журнал не найден. Будет создан новый файл и шаблон для подкоманды `newday`");
         }
         return sb.toString();
     }
