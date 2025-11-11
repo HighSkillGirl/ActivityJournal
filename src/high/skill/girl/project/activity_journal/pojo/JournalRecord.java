@@ -11,9 +11,10 @@ public record JournalRecord(String weekDayName, int dayOfMonth,
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        String dayInfo = String.format("[%s %d] ", weekDayName, dayOfMonth);
+        String dayInfo = String.format("[%s %d]", weekDayName, dayOfMonth);
         dayInfoLength = dayInfo.length();
-        stringBuilder.append(dayInfo);
+        String space = dayInfoLength == 7 ? " " : "  ";
+        dayInfoLength = stringBuilder.append(dayInfo).append(space).length();
 
         for (int i = 0; i < activityDetails.size(); i++) {
             if (i == activityDetails.size() -1) dayInfoLength = -1;

@@ -9,9 +9,9 @@ conky.config = {
     own_window = true,
     own_window_type = 'desktop',   -- без рамок, на фоне рабочего стола
     own_window_name = 'ConkyActivityJournal',  -- уникальное имя
-    own_window_transparent = true,
+    own_window_transparent = false,
     own_window_argb_visual = true,
-    own_window_argb_value = 0,     -- прозрачность (0 = полностью прозрачно)
+    own_window_argb_value = 77,     -- прозрачность (0 = полностью прозрачно)
     own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
 
     alignment = 'top_left',       -- положение: сверху справа
